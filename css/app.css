@@ -1,0 +1,218 @@
+/* Common Styles */
+/* For float */
+.float-left {
+  float: left;
+}
+
+.float-right {
+  float: right;
+}
+
+.float-clear {
+  clear: both;
+  height: 1px;
+}
+
+/* For modern browsers */
+.float-clearfix:before,
+.float-clearfix:after {
+  content: "";
+  display: table;
+}
+
+.float-clearfix:after {
+  clear: both;
+}
+
+/* For IE 6/7 (trigger hasLayout) */
+.float-clearfix {
+  zoom: 1;
+}
+
+/* For element show/hide */
+.show {
+  display: block;
+}
+
+.hide {
+  display: none;
+}
+
+.visible {
+  visibility: visible;
+}
+
+.invisible {
+  visibility: hidden;
+}
+
+.pos-absolute {
+  position: absolute;
+}
+
+.pos-relative {
+  position: relative;
+}
+
+.overflow-hidden {
+  overflow: hidden;
+}
+
+/* For text alignment */
+.left {
+  text-align: left;
+}
+
+.center {
+  text-align: center;
+}
+
+.right {
+  text-align: right;
+}
+
+.justify {
+  text-align: justify;
+}
+
+.button {
+  background: #3498db;
+  background-image: -webkit-linear-gradient(top, #3498db, #2980b9);
+  background-image: -moz-linear-gradient(top, #3498db, #2980b9);
+  background-image: -ms-linear-gradient(top, #3498db, #2980b9);
+  background-image: -o-linear-gradient(top, #3498db, #2980b9);
+  background-image: linear-gradient(to bottom, #3498db, #2980b9);
+  -webkit-border-radius: 2;
+  -moz-border-radius: 2;
+  border-radius: 2px;
+  -webkit-box-shadow: 0px 1px 3px #666666;
+  -moz-box-shadow: 0px 1px 3px #666666;
+  box-shadow: 0px 1px 3px #666666;
+  font-family: Arial;
+  color: #ffffff;
+  font-size: 20px;
+  padding: 10px 20px 10px 20px;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.button:hover {
+  background: #3cb0fd;
+  background-image: -webkit-linear-gradient(top, #3cb0fd, #3498db);
+  background-image: -moz-linear-gradient(top, #3cb0fd, #3498db);
+  background-image: -ms-linear-gradient(top, #3cb0fd, #3498db);
+  background-image: -o-linear-gradient(top, #3cb0fd, #3498db);
+  background-image: linear-gradient(to bottom, #3cb0fd, #3498db);
+  text-decoration: none;
+}
+
+/* Blink cursor in virtual input box */
+/* http://terminal.jcubic.pl/examples.php#wild */
+
+/* another blink cursor */
+/* http://www.mattboldt.com/demos/typed-js/ */
+.vi-cursor {
+  animation: 0.7s ease 0s normal none infinite running blink;
+  background-color: #000;
+  color: #232323;
+  display: inline-block;
+  font-family: "Arial";
+  font-size: 28px;
+  height: 25px;
+  line-height: 1.4em;
+  margin: 0;
+  opacity: 1;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  text-align: left;
+  text-shadow: 0 1px 0 #000;
+  top: 8px;
+  width: 1px;
+}
+
+@-keyframes blink {
+  0%   { opacity: 1; }
+  50%  { opacity: 0; }
+  100% { opacity: 1; } 
+}
+@-webkit-keyframes blink {
+  0%   { opacity: 1; }
+  50%  { opacity: 0; }
+  100% { opacity: 1; } 
+}
+@-moz-keyframes blink {
+  0%   { opacity: 1; }
+  50%  { opacity: 0; }
+  100% { opacity: 1; } 
+}
+@-ms-keyframes blink {
+  0%   { opacity: 1; }
+  50%  { opacity: 0; }
+  100% { opacity: 1; } 
+}
+@-o-keyframes blink {
+  0%   { opacity: 1; }
+  50%  { opacity: 0; }
+  100% { opacity: 1; } 
+}
+
+
+/* App styles */
+html *{
+  box-sizing: border-box;
+  font-family: 'Trebuchet MS';
+}
+
+.container{
+  margin: 20px 200px;
+  padding: 20px;
+  border: 1px solid #dfdfdf;
+  text-align: center;
+}
+
+.actual-input,
+.virtual-input{
+  width: 60%;
+  height: 50px;
+  border: 1px solid rgb(45, 110, 210);
+  padding: 5px;
+  font-size: 16px;
+  border-radius: 2px;
+}
+
+.virtual-input{
+  cursor: text;
+  display: inline-block;
+  line-height: 32px;
+  position: relative;
+}
+
+.virtual-input:focus{
+  box-shadow: 0px 0px 6px rgb(45, 110, 210);
+  border: none;
+  outline: none;
+},
+.virtual-input-focus .vi-cursor{
+  display: inline-block;
+}
+
+.actual-input{
+  font-size: 16px;
+  text-align: center;
+  border-color: rgb(210, 158, 45);
+  outline: none;
+}
+
+.actual-input:focus{
+  box-shadow: 0px 0px 6px rgb(210, 158, 45);
+  border: none;
+}
+
+.center{
+  text-align: center;
+}
+
+.top-gap{
+  margin-top: 20px;
+}

@@ -1,0 +1,47 @@
+<!doctype html>
+<html ng-app="virtualInputApp">
+	<head>
+		<link rel="stylesheet" type="text/css" href="css/app.css">
+		<style type="text/css">
+			.keyboard .button{
+				font-size: 18px;
+		    height: 30px;
+		    line-height: 9px;
+		    width: auto;
+			}
+
+			.virtual-input-focus{
+				color: orange;
+			}
+		</style>
+	</head>
+	<body ng-controller="VIController">
+		<div class="container">
+			<p>Virtual input!</p>
+			<div class="center">
+				<input type="text" class="actual-input" ng-model="inputText">
+			</div>
+			<div class="center top-gap">
+				<div id="virtual-input-elem" tabindex="0" class="virtual-input" ngg-bind="inputText"></div>
+			</div>
+			<div class="center top-gap">
+				<a class="bind button" href="#" ng-if="!isRegister" ng-click="register($event)">Start</a>
+				<a class="unbind button" href="#" ng-if="isRegister" ng-click="deregister($event)">Stop</a>
+			</div>
+			<div class="top-gap keyboard" ng-if="isRegister">
+				<a href="#" data-key="a" ng-click="triggerKey($event)" class="button">a</a>
+				<a href="#" data-key="b" ng-click="triggerKey($event)" class="button">b</a>
+				<a href="#" data-key="c" ng-click="triggerKey($event)" class="button">c</a>
+				<a href="#" data-key="d" ng-click="triggerKey($event)" class="button">d</a>
+				<a href="#" data-key="e" ng-click="triggerKey($event)" class="button">e</a>
+				<a href="#" data-key="f" ng-click="triggerKey($event)" class="button">f</a>
+				<a href="#" data-key="enter" ng-click="triggerKey($event)" class="button">enter</a>
+			</div>
+		</div>
+		<script type="text/javascript" src="js/jquery.js"></script>
+		<script type="text/javascript" src="js/angular.js"></script>
+		<script type="text/javascript" src="js/mousetrap.js"></script>
+		<script type="text/javascript" src="js/virtual-input.js"></script>
+		<script type="text/javascript" src="js/app.js"></script>
+	</body>
+</html>
