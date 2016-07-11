@@ -210,7 +210,9 @@
             // event when capital A is pressed caps lock will no longer
             // trigger the event.  shift+a will though.
             if (!e.shiftKey) {
-                character = character.toLowerCase();
+                // Amitesh : Let it be differentiate between small and caps.
+                // In case of Caps on it is still triggering lowercase letter for some reason we don't want it.
+                //character = character.toLowerCase();
             }
 
             return character;

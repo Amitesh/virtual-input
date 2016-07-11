@@ -29,6 +29,7 @@
     ];
 
     this.keyProcessor = new KeyProcessor(this.keysList);
+    this.letterPlacer = new LetterPlacer(this.elem);
     this.callback = function(){};
   }
 
@@ -106,13 +107,14 @@
 
   VirtualInput.prototype.setText = function(info) {
     var htmlText = this.textFormatter(info.output, info.cursorPosition);
-    return $(this.elem).html(htmlText);
+    $(this.elem).html(htmlText);
+    this.letterPlacer.setLettersPosition();
+    // return $(this.elem);
   };
 
   VirtualInput.prototype.getCursorPosition = function() {
     return $('.vi-cursor', $(this.elem)).index();
   };
-
 
   VirtualInput.prototype.textFormatter = function(text, cursorPosition){
     var letters = text.split('');
@@ -255,6 +257,41 @@
     }
   }
 
+  function LetterPlacer(inputBox){
+    var box = $(inputBox);
+
+    return {
+      getInputBoxWidth: function(){
+        return box.width() - 0 /* padding */;
+      },
+
+      getLettersWidth: function(){
+        var lettersWidth = 0;
+
+        box.find('.vi-letter').each(function(i, l){
+          lettersWidth += $(l).width();
+        });
+        return lettersWidth;
+      },
+
+      isLettersWidthGreaterThanInputBox: function(){
+        var boxWidth = this.getInputBoxWidth();
+        var lettersWidth = this.getLettersWidth();
+
+        console.log('boxWidth =>', boxWidth, '   letter width =>', lettersWidth,  ' difference =>', lettersWidth - boxWidth);
+        return lettersWidth > boxWidth;
+      },
+
+      setLettersPosition: function(){
+        if(this.isLettersWidthGreaterThanInputBox()){
+          console.log('set position...');
+          var extraLen = this.getLettersWidth() - this.getInputBoxWidth(); // cache the width
+          box.find('.vi-letter:first').css({'margin-left': -1 * extraLen});
+        }
+      }
+
+    }
+  }
   window.VirtualInput = VirtualInput;
 
 })(jQuery);

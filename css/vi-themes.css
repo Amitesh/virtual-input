@@ -1,0 +1,47 @@
+/* another blink cursor */
+/* http://www.mattboldt.com/demos/typed-js/ */
+
+/*** dark theme  ***/
+.dark-theme .virtual-input {
+  /*background: url(../images/vi-bg.png) no-repeat center center;*/
+  background: url(http://subtlepatterns2015.subtlepatterns.netdna-cdn.com/patterns/binding_dark.png) repeat center center;
+  font-size: 45px;
+  border: none;
+  text-align: center;
+  color: #fff;
+  width: 8in;
+  height: 114px;
+  outline: 0;
+  font-family: genius-regular;
+  top: -10px;
+  cursor: text;
+  display: inline-block;
+  line-height: 92px;
+  position: relative;
+}
+.dark-theme .virtual-input:focus {
+  box-shadow: 0px 0px 6px #2d6ed2;
+  border: none;
+  outline: none;
+}
+.dark-theme .virtual-input-focus .vi-cursor {
+  display: inline-block;
+}
+.dark-theme .vi-cursor {
+  background-color: #fff;
+  font-size: 45px;
+  height: 50px;
+  line-height: 75pt;
+  text-shadow: 0 1px 0 #000;
+  box-shadow: 1px 1px 1px #060606;
+  top: 2pc;
+  width: 3px;
+  margin-left: -1px;
+  -ms-animation: blink 0.7s infinite;
+}
+
+.dark-theme .vi-letter {
+    text-shadow: 1px 2px 0 #000;
+}
+
+/*** end spello theme ***/
