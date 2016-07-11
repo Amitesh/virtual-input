@@ -40,6 +40,11 @@ angular.module('virtualInputApp', [])
 
     function onKeyInput(info){
       // console.log('in onKeyInput =>', info);
+      
+      if(info.key == 'backspace'){
+        info.event.preventDefault();
+      }
+
       $timeout(function(){
         vi.setText(info);
         $scope.inputText = info.output;
