@@ -27,7 +27,27 @@
 }
 
 .vi-cursor {
+  -webkit-animation: 0.7s ease 0s normal none infinite running blink;
+  -webkit-animation-name: blink;
+  -webkit-animation-duration: 0.7s;
+  -webkit-animation-timing-function: ease;
+  -webkit-animation-delay: 0s;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-direction: normal;
+  -webkit-animation-fill-mode: none;
+  -webkit-animation-play-state: running;
+  
   animation: 0.7s ease 0s normal none infinite running blink;
+  animation-name: blink;
+  animation-duration: 0.7s;
+  animation-timing-function: ease;
+  animation-delay: 0s;
+  animation-iteration-count: infinite;
+  animation-direction: normal;
+  animation-fill-mode: none;
+  animation-play-state: running;
+
+
   background-color: #000;
   color: #232323;
   display: inline-block;
