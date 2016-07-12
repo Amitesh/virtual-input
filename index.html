@@ -2,13 +2,14 @@
 <html ng-app="virtualInputApp">
 	<head>
 		<link rel="stylesheet" type="text/css" href="css/app.css">
+		<link rel="stylesheet" type="text/css" href="css/virtual-input.css">
 		<link rel="stylesheet" type="text/css" href="css/vi-themes.css">
 		<style type="text/css">
 			.keyboard .button{
 				font-size: 18px;
-		    height: 30px;
-		    line-height: 9px;
-		    width: auto;
+			    height: 30px;
+			    line-height: 9px;
+			    width: auto;
 			}
 
 			.virtual-input-focus{
@@ -25,7 +26,7 @@
 				<input type="text" class="actual-input" ng-model="inputText">
 			</div>
 			<div class="center top-gap">
-				<div id="virtual-input-elem" tabindex="0" class="virtual-input" ngg-bind="inputText"></div>
+				<div id="virtual-input-elem" tabindex="0" class="virtual-input" placeholder1="sfdsfdsfdsfdsfsdfsfdsfdsfsfsfdsfdsfdsfds" ngg-bind="inputText"></div>
 			</div>
 			<div class="center top-gap">
 				<a class="bind button" href="#" ng-if="!isRegister" ng-click="register($event)">Start</a>

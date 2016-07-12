@@ -2,6 +2,9 @@
 /* http://www.mattboldt.com/demos/typed-js/ */
 
 /*** dark theme  ***/
+.dark-theme{
+  background: url('http://subtlepatterns2015.subtlepatterns.netdna-cdn.com/patterns/purty_wood.png') repeat;
+}
 .dark-theme .virtual-input {
   /*background: url(../images/vi-bg.png) no-repeat center center;*/
   background: url(http://subtlepatterns2015.subtlepatterns.netdna-cdn.com/patterns/binding_dark.png) repeat center center;

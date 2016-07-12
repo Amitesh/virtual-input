@@ -307,33 +307,88 @@
 
   function LetterPlacer(inputBox){
     var box = $(inputBox);
+    var maxLetterWidth = 15;
 
     return {
       getInputBoxWidth: function(){
-        return box.width() - 0 /* padding */;
+        var getWidth = function(cssProp){
+          var b = box.css(cssProp);
+          if(b !== undefined){
+            b = parseInt(b.toString().replace(/([^0-9])+/g, ''));
+          }else{
+            b = 0;
+          }
+          return b;
+        }
+
+        var borderWidth  = getWidth('border-left-width') + getWidth('border-right-width');
+        var paddingWidth = getWidth('padding-left') + getWidth('padding-right');
+        var marginWidth = getWidth('margin-left') + getWidth('margin-right');
+        // console.log('box.width()', box.width(), ' borderWidth =>', borderWidth, 'paddingWidth =>', paddingWidth);
+        return { 
+          width: box.width(),
+          borderWidth: borderWidth,
+          paddingWidth: paddingWidth,
+          marginWidth: marginWidth
+        };
       },
 
       getLettersWidth: function(){
         var lettersWidth = 0;
+        var maxLW = 0;
 
         box.find('.vi-letter').each(function(i, l){
-          lettersWidth += $(l).width();
+          var lw = $(l).width();
+          
+          if(maxLW < lw){
+            maxLW = lw;
+          }
+
+          lettersWidth += lw;
         });
+
+        maxLetterWidth = maxLW;
         return lettersWidth;
       },
 
       isLettersWidthGreaterThanInputBox: function(){
         var boxWidth = this.getInputBoxWidth();
         var lettersWidth = this.getLettersWidth();
+        var bw = boxWidth.width ; //+ boxWidth.borderWidth + boxWidth.paddingWidth;
 
-        console.log('boxWidth =>', boxWidth, '   letter width =>', lettersWidth,  ' difference =>', lettersWidth - boxWidth);
-        return lettersWidth > boxWidth;
+        // console.log('boxWidth =>', boxWidth, '   letter width =>', lettersWidth,  ' difference =>', lettersWidth - bw);
+        return lettersWidth > bw;
+      },
+
+      /**
+       * There is a small gap increases when we add long words ( more than 10 letters in words).
+       * To mitigate the gap on right side we have to use this factor.
+       * @return {[type]} [description]
+       */
+      getWidthFactorForLongWords: function(lettersWidth){
+        // 2123 => 56, 1573 => 41
+        // x = (41/1573 )* y => x = 0.026064y;
+        // return Math.round(0.026064 * lettersWidth);
+        return Math.round(0.026377 * lettersWidth);
       },
 
       setLettersPosition: function(){
         if(this.isLettersWidthGreaterThanInputBox()){
-          console.log('set position...');
-          var extraLen = this.getLettersWidth() - this.getInputBoxWidth(); // cache the width
+          // console.log('set position...');
+          var firstLetterWidth = box.find('.vi-letter:first').width();
+          var cursorWidth = 0;
+
+          // It will give space on right side of input box so that cursor will not come in center (wrap)
+          var rightGap = 2 * maxLetterWidth;
+
+          var bw = this.getInputBoxWidth();
+          var lettersWidth = this.getLettersWidth();
+          var factor = this.getWidthFactorForLongWords(lettersWidth);
+
+          var extraLen = lettersWidth - bw.width - bw.paddingWidth - bw.borderWidth;
+              extraLen =  extraLen - firstLetterWidth - cursorWidth + rightGap - factor;
+
+          console.log('extraLen =>', extraLen, ' factor =>', factor, ' len =>', box.find('.vi-letter').size(), ' this.getLettersWidth =>', this.getLettersWidth(), ' this.getInputBoxWidth() =>', this.getInputBoxWidth() , ' firstLetterWidth =>', firstLetterWidth, "\n====");
           box.find('.vi-letter:first').css({'margin-left': -1 * extraLen});
         }
       }

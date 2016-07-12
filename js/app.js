@@ -3,11 +3,18 @@ angular.module('virtualInputApp', [])
     $scope.inputText = '';
     $scope.isRegister = false;
     
-    var vi = new VirtualInput('#virtual-input-elem');
+    var vi = new VirtualInput('#virtual-input-elem', null, 40);
 
     $scope.register = function($event){
       vi.register(onKeyInput);
       $scope.isRegister = true;
+
+      var placeholder = $('#virtual-input-elem').attr('placeholder');
+      if(placeholder){
+        vi.setText({output: placeholder, cursorPosition: vi.getCursorPosition()});
+      }
+
+
       vi.setFocus();
 
       $event && $event.preventDefault();

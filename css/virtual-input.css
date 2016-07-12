@@ -14,6 +14,7 @@
   display: inline-block;
   line-height: 32px;
   position: relative;
+  overflow: hidden;
 }
 
 .virtual-input:focus{

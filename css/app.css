@@ -111,7 +111,7 @@
 
 /* another blink cursor */
 /* http://www.mattboldt.com/demos/typed-js/ */
-.vi-cursor {
+/*.vi-cursor {
   animation: 0.7s ease 0s normal none infinite running blink;
   background-color: #000;
   color: #232323;
@@ -155,7 +155,7 @@
   0%   { opacity: 1; }
   50%  { opacity: 0; }
   100% { opacity: 1; } 
-}
+}*/
 
 
 /* App styles */
@@ -171,8 +171,8 @@ html *{
   text-align: center;
 }
 
-.actual-input,
-.virtual-input{
+.actual-input
+/*,.virtual-input*/{
   width: 60%;
   height: 50px;
   border: 1px solid rgb(45, 110, 210);
@@ -181,7 +181,7 @@ html *{
   border-radius: 2px;
 }
 
-.virtual-input{
+/*.virtual-input{
   cursor: text;
   display: inline-block;
   line-height: 32px;
@@ -195,7 +195,7 @@ html *{
 },
 .virtual-input-focus .vi-cursor{
   display: inline-block;
-}
+}*/
 
 .actual-input{
   font-size: 16px;
