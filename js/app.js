@@ -3,7 +3,7 @@ angular.module('virtualInputApp', [])
     $scope.inputText = '';
     $scope.isRegister = false;
     
-    var vi = new VirtualInput('#virtual-input-elem', null, 40);
+    var vi = new VirtualInput('#virtual-input-elem', null, -1);
 
     $scope.register = function($event){
       vi.register(onKeyInput);
@@ -44,6 +44,10 @@ angular.module('virtualInputApp', [])
     $scope.submit = function(){
       alert('submit your data...');
     };
+
+    $scope.getLength = function(){
+      return $('#virtual-input-elem').find('.vi-letter').size();
+    }
 
     function onKeyInput(info){
       // console.log('in onKeyInput =>', info);

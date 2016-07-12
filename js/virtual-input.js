@@ -386,7 +386,11 @@
           var factor = this.getWidthFactorForLongWords(lettersWidth);
 
           var extraLen = lettersWidth - bw.width - bw.paddingWidth - bw.borderWidth;
-              extraLen =  extraLen - firstLetterWidth - cursorWidth + rightGap - factor;
+              extraLen =  extraLen - firstLetterWidth - cursorWidth + rightGap;
+
+              if(!bowser.firefox){
+                extraLen =  extraLen - factor;
+              }
 
           console.log('extraLen =>', extraLen, ' factor =>', factor, ' len =>', box.find('.vi-letter').size(), ' this.getLettersWidth =>', this.getLettersWidth(), ' this.getInputBoxWidth() =>', this.getInputBoxWidth() , ' firstLetterWidth =>', firstLetterWidth, "\n====");
           box.find('.vi-letter:first').css({'margin-left': -1 * extraLen});
