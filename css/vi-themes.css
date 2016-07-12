@@ -3,11 +3,11 @@
 
 /*** dark theme  ***/
 .dark-theme{
-  background: url('http://subtlepatterns2015.subtlepatterns.netdna-cdn.com/patterns/purty_wood.png') repeat;
+  background: url('../images/purty_wood.png') repeat;
 }
 .dark-theme .virtual-input {
   /*background: url(../images/vi-bg.png) no-repeat center center;*/
-  background: url(http://subtlepatterns2015.subtlepatterns.netdna-cdn.com/patterns/binding_dark.png) repeat center center;
+  background: url(../images/binding_dark.png) repeat center center;
   font-size: 45px;
   border: none;
   text-align: center;

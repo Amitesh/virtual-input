@@ -388,11 +388,14 @@
           var extraLen = lettersWidth - bw.width - bw.paddingWidth - bw.borderWidth;
               extraLen =  extraLen - firstLetterWidth - cursorWidth + rightGap;
 
-              if(!bowser.firefox){
+              // Some browser specific magics
+              if(bowser.msie || bowser.firefox || (bowser.chrome && parseInt(bowser.version) >= 52)){
+                extraLen =  extraLen;
+              }else{
                 extraLen =  extraLen - factor;
               }
 
-          console.log('extraLen =>', extraLen, ' factor =>', factor, ' len =>', box.find('.vi-letter').size(), ' this.getLettersWidth =>', this.getLettersWidth(), ' this.getInputBoxWidth() =>', this.getInputBoxWidth() , ' firstLetterWidth =>', firstLetterWidth, "\n====");
+          // console.log('extraLen =>', extraLen, ' factor =>', factor, ' len =>', box.find('.vi-letter').size(), ' this.getLettersWidth =>', this.getLettersWidth(), ' this.getInputBoxWidth() =>', this.getInputBoxWidth() , ' firstLetterWidth =>', firstLetterWidth, "\n====");
           box.find('.vi-letter:first').css({'margin-left': -1 * extraLen});
         }
       }
