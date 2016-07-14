@@ -336,6 +336,8 @@
       getLettersWidth: function(){
         var lettersWidth = 0;
         var maxLW = 0;
+        var lettersWidthOffset = 0;
+
 
         box.find('.vi-letter').each(function(i, l){
           var lw = $(l).width();
@@ -345,10 +347,21 @@
           }
 
           lettersWidth += lw;
+          lettersWidthOffset += $(l).get(0).offsetWidth; 
         });
 
         maxLetterWidth = maxLW;
-        return lettersWidth;
+
+        var size1 = calculateSize($('#virtual-input-elem .vi-letter').text(), {
+           font: 'Trebuchet MS',
+           fontSize: '45px',
+           fontWeight: 'normal'
+        });
+
+
+        console.log('lettersWidth =>', lettersWidth, ' lettersWidthOffset =>', lettersWidthOffset, ' size1 =>', size1.width );
+
+        return size1.width || lettersWidth;
       },
 
       isLettersWidthGreaterThanInputBox: function(){
@@ -389,13 +402,15 @@
               extraLen =  extraLen - firstLetterWidth - cursorWidth + rightGap;
 
               // Some browser specific magics
-              if(bowser.msie || bowser.firefox || (bowser.chrome && parseInt(bowser.version) >= 52)){
-                extraLen =  extraLen;
-              }else{
-                extraLen =  extraLen - factor;
-              }
+              // if(bowser.msie || bowser.firefox || (bowser.chrome && parseInt(bowser.version) >= 52)){
+              //   extraLen =  extraLen;
+              // }else{
+              //   extraLen =  extraLen - factor;
+              // }
 
-          // console.log('extraLen =>', extraLen, ' factor =>', factor, ' len =>', box.find('.vi-letter').size(), ' this.getLettersWidth =>', this.getLettersWidth(), ' this.getInputBoxWidth() =>', this.getInputBoxWidth() , ' firstLetterWidth =>', firstLetterWidth, "\n====");
+          console.log('extraLen =>', extraLen, ' factor =>', factor, ' len =>', box.find('.vi-letter').size(), 
+            ' this.getLettersWidth =>', this.getLettersWidth(), ' this.getInputBoxWidth() =>', this.getInputBoxWidth() , 
+            ' firstLetterWidth =>', firstLetterWidth, "\n====");
           box.find('.vi-letter:first').css({'margin-left': -1 * extraLen});
         }
       }
