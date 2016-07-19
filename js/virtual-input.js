@@ -131,7 +131,7 @@
       output: this.getText(),
       cursorPosition: clickedPos
     });
-    return false
+    return false;
   };
 
   VirtualInput.prototype.getText = function() {
@@ -141,7 +141,7 @@
   VirtualInput.prototype.setText = function(info) {
     var htmlText = this.textFormatter(info.output, info.cursorPosition);
     $(this.elem).html(htmlText);
-    this.letterPlacer.setLettersPosition();
+    this.letterPlacer.setLettersPosition(info);
     // return $(this.elem);
   };
 
@@ -157,7 +157,7 @@
     }
 
     // There is cursor position issue for empty text in input box
-    if(bowser.msie && letters.length == 0 ){
+    if(bowser.msie && letters.length === 0 ){
       var lettersSpan = '<span class="vi-letter dummy-elem-ie-hack">&nbsp;</span><span class="vi-cursor">|</span>';
       letters.splice(cursorPosition, 0, lettersSpan);
     }else{
@@ -165,7 +165,7 @@
     }
     
     return letters.join('');
-  }
+  };
 
   VirtualInput.prototype.bindKeys = function() {
     if(this.isKeysBound){
@@ -207,29 +207,29 @@
 
   function KeyProcessor(keysList, maxLength){
     this.keyList = keysList || [];
-    var maxLength = maxLength || -1;
+    maxLength = maxLength || -1;
 
     var removeChar = function(text, cursorPosition){
-      var cursorPosition = cursorPosition || 0;
+      cursorPosition = cursorPosition || 0;
 
       var b1 = text.slice(0, cursorPosition - 1),
           b2 = text.slice(cursorPosition, text.length),
           d  = text.charAt(cursorPosition-1);
 
       return b1 + b2;
-    }
+    };
 
     var insertChar = function(text, char, cursorPosition){
-      var cursorPosition = cursorPosition || 0;
+      cursorPosition = cursorPosition || 0;
       var letters = text.split('');
       letters.splice(cursorPosition, 0, char);
 
       return letters.join('');
-    }
+    };
 
     return {
       getProcessedInputInfo: function(text, key, cursorPosition){
-        cursorPosition = cursorPosition == null ? output.length : cursorPosition;
+        cursorPosition = cursorPosition === null ? output.length : cursorPosition;
 
         var output = text,
             prevCursorPosition = cursorPosition,
@@ -299,15 +299,15 @@
           prevCursorPosition: prevCursorPosition,
           cursorPosition: cursorPosition,
           isSpecialKey: isSpecialKey
-        }
+        };
       }
 
-    }
+    };
   }
 
   function LetterPlacer(inputBox){
     var box = $(inputBox);
-    var maxLetterWidth = 15;
+    var maxLetterWidth = 15; // in px
 
     return {
       getInputBoxWidth: function(){
@@ -319,7 +319,7 @@
             b = 0;
           }
           return b;
-        }
+        };
 
         var borderWidth  = getWidth('border-left-width') + getWidth('border-right-width');
         var paddingWidth = getWidth('padding-left') + getWidth('padding-right');
@@ -385,7 +385,8 @@
         return Math.round(0.026377 * lettersWidth);
       },
 
-      setLettersPosition: function(){
+      setLettersPosition: function(info){
+        console.log('---- haha -----');
         if(this.isLettersWidthGreaterThanInputBox()){
           // console.log('set position...');
           var firstLetterWidth = box.find('.vi-letter:first').width();
@@ -411,11 +412,89 @@
           console.log('extraLen =>', extraLen, ' factor =>', factor, ' len =>', box.find('.vi-letter').size(), 
             ' this.getLettersWidth =>', this.getLettersWidth(), ' this.getInputBoxWidth() =>', this.getInputBoxWidth() , 
             ' firstLetterWidth =>', firstLetterWidth, "\n====");
-          box.find('.vi-letter:first').css({'margin-left': -1 * extraLen});
+          // box.find('.vi-letter:first').css({'margin-left': -1 * extraLen});
+
+          this.calculateCursorPosition(extraLen, bw);
+        }else{
+          box.data('prev-extra-left', 0).data('letters', box.find('.vi-letter').size());
         }
+      },
+
+      getPreviousExtraLeft: function(currExtraLeft){
+        var extraLeft   = box.data('prev-extra-left') || 0;
+        var extraLen   = box.data('prev-extra-length') || 0;
+        var prevLetters = box.data('letters') || 0;
+        var currLetters = box.find('.vi-letter').size();
+
+        // Some character is deleted by backspace or delete key
+        if(currLetters < prevLetters){
+          extraLeft = extraLeft - (extraLen - currExtraLeft);
+        }
+
+        return extraLeft;
+      },
+
+      calculateCursorPosition: function(extraLeft, boxWidth){
+        var cursor = box.find('.vi-cursor');
+        var firstLetter = box.find('.vi-letter:first');
+        var x = extraLeft;
+        var cw = cursor.width();
+        var cLeft = cursor.offset().left;
+        var lw = maxLetterWidth;
+        var bw = boxWidth.width - boxWidth.paddingWidth - boxWidth.borderWidth;
+        var atMostLeft = false;
+        var atMostRight = false;
+        
+        var prevExtraLeft = this.getPreviousExtraLeft(extraLeft);
+        box.data('prev-extra-length', extraLeft);
+
+        var bRect = box.get(0).getBoundingClientRect();
+        var cRect = cursor.get(0).getBoundingClientRect();
+
+        // if(cLeft < x + lw){
+        //   atMostLeft = true;
+        // }else if(cLeft > x + bw - lw){
+        //   atMostRight = true;
+        // }
+
+        // if((cRect.left - extraLeft )< bRect.left){
+        //   atMostLeft = true;
+        // }else if(bRect.right < cRect.right){
+        //   atMostRight = true;
+        // }
+
+        if((cRect.left - extraLeft )< bRect.left){
+          atMostLeft = true;
+        }else if(bRect.right < (cRect.right - prevExtraLeft)){
+          atMostRight = true;
+        }
+
+        if(atMostLeft){
+          var rlw = cursor.next().get(0).offsetWidth; // right letter width
+          extraLeft = extraLeft - cw - rlw;
+
+          extraLeft = cRect.left - firstLetter.get(0).getBoundingClientRect().left;
+        }else if(atMostRight){
+          var hasNextLetter = !!cursor.next().get(0);
+
+          // if(hasNextLetter){
+            // var llw = cursor.prev().get(0).offsetWidth; // left letter width
+            // extraLeft = extraLeft + cw + llw;
+            extraLeft = cRect.right - bRect.right + 6;
+          // }
+        }else{
+          extraLeft = prevExtraLeft;
+        }
+
+        //if(atMostLeft || atMostRight){
+          box.find('.vi-letter:first').css({'margin-left': -1 * extraLeft});
+        //}
+        
+        box.data('prev-extra-left', extraLeft).data('letters', box.find('.vi-letter').size());
+        
       }
 
-    }
+    };
   }
   window.VirtualInput = VirtualInput;
 
