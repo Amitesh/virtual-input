@@ -41,7 +41,7 @@
     element.parentNode.removeChild(element);
   }
 
-  var cache = {}
+  var cache = {};
 
   return function(text, options) {
 

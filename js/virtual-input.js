@@ -29,10 +29,10 @@
 
 // import bowser from 'bowser';
 
-;(function($){
+(function($) {
   'use strict';
 
-  function VirtualInput(elem, keysList, maxLength){ // maxLength => no of max chars
+  function VirtualInput(elem, keysList, maxLength) { // maxLength => no of max chars
     this.mousetrap = null;
     this.isKeysBound = false;
     this.cursorPosition = 0;
@@ -41,20 +41,20 @@
     this.maxLength = maxLength || 20 || -1;
 
     this.keysList = keysList || [
-          // Special keys
-          'backspace', 'del', 'enter', 'left', 'right', 'up', 'down', 'home', 'end', 'pageup', 'pagedown',
+      // Special keys
+      'backspace', 'del', 'enter', 'left', 'right', 'up', 'down', 'home', 'end', 'pageup', 'pagedown',
 
-          '\'', '-',
+      '\'', '-',
 
-          'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l',
-          'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
-          'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
-          'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
-        ];
+      'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l',
+      'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+      'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
+      'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
+    ];
 
     this.keyProcessor = new KeyProcessor(this.keysList, this.maxLength);
     this.letterPlacer = new LetterPlacer(this.elem);
-    this.callback = function(){};
+    this.callback = function() {};
   }
 
   VirtualInput.prototype.getMousetrap = function() {
@@ -62,7 +62,10 @@
   };
 
   VirtualInput.prototype.clearInput = function() {
-    this.setText({output: '', cursorPosition: this.getCursorPosition()});
+    this.setText({
+      output: '',
+      cursorPosition: this.getCursorPosition()
+    });
   };
 
   VirtualInput.prototype.register = function(callback) {
@@ -70,10 +73,10 @@
 
     this.mousetrap = new Mousetrap($(this.elem).get(0));
 
-    $(this.elem).on('focus', $.proxy( self.onFocus, self))
-        .on('blur', $.proxy( self.onBlur, self))
-        .on('click', $.proxy( self.onClick, self))
-        .on('click', '.vi-letter', $.proxy( self.onSetCursorOnClick, self));
+    $(this.elem).on('focus', $.proxy(self.onFocus, self))
+      .on('blur', $.proxy(self.onBlur, self))
+      .on('click', $.proxy(self.onClick, self))
+      .on('click', '.vi-letter', $.proxy(self.onSetCursorOnClick, self));
 
     this.callback = callback;
     this.bindKeys();
@@ -82,19 +85,19 @@
 
   VirtualInput.prototype.deregister = function() {
     // There is issue to call blur function on trigger.
-    if(bowser.msie){
+    if (bowser.msie) {
       this.onBlur();
-    }else{
-      $(this.elem).trigger('blur');  
+    } else {
+      $(this.elem).trigger('blur');
     }
 
     $(this.elem).off('focus', this.onFocus)
-        .off('blur', this.onBlur)
-        .off('click', this.onClick)
-        .off('click', '.vi-letter', self.onSetCursorOnClick);
+      .off('blur', this.onBlur)
+      .off('click', this.onClick)
+      .off('click', '.vi-letter', self.onSetCursorOnClick);
 
     this.unbindKeys();
-    this.mousetrap && this.mousetrap.destroy();
+    this.mousetrap && this.mousetrap.destroy(); // jshint ignore:line
 
     delete this.mousetrap;
   };
@@ -105,12 +108,16 @@
   VirtualInput.prototype.onFocus = function() {
     var self = this;
     $(this.elem).addClass('virtual-input-focus');
-    $(this.elem).find('.vi-cursor').css({visibility: 'visible'});
+    $(this.elem).find('.vi-cursor').css({
+      visibility: 'visible'
+    });
   };
 
   VirtualInput.prototype.onBlur = function() {
     $(this.elem).removeClass('virtual-input-focus');
-    $(this.elem).find('.vi-cursor').css({visibility: 'hidden'});
+    $(this.elem).find('.vi-cursor').css({
+      visibility: 'hidden'
+    });
   };
 
   VirtualInput.prototype.onClick = function() {
@@ -123,9 +130,9 @@
    * If clicked on left haft of letter then put it left of that
    * letter else put on right
    */
-  VirtualInput.prototype.onSetCursorOnClick = function(event){
+  VirtualInput.prototype.onSetCursorOnClick = function(event) {
     var clickedPos = $(event.target).index();
-    clickedPos = this.getCursorPosition() > clickedPos ? clickedPos+1 : clickedPos;
+    clickedPos = this.getCursorPosition() > clickedPos ? clickedPos + 1 : clickedPos;
 
     this.setText({
       output: this.getText(),
@@ -141,7 +148,7 @@
   VirtualInput.prototype.setText = function(info) {
     var htmlText = this.textFormatter(info.output, info.cursorPosition);
     $(this.elem).html(htmlText);
-    this.letterPlacer.setLettersPosition(info);
+    this.letterPlacer.setLettersPosition();
     // return $(this.elem);
   };
 
@@ -150,25 +157,25 @@
   };
 
 
-  VirtualInput.prototype.textFormatter = function(text, cursorPosition){
+  VirtualInput.prototype.textFormatter = function(text, cursorPosition) {
     var letters = text.split('');
-    for(var i=0, len=letters.length; i<len; i++){
+    for (var i = 0, len = letters.length; i < len; i++) {
       letters[i] = '<span class="vi-letter">' + letters[i] + '</span>';
     }
 
     // There is cursor position issue for empty text in input box
-    if(bowser.msie && letters.length === 0 ){
+    if (bowser.msie && letters.length === 0) {
       var lettersSpan = '<span class="vi-letter dummy-elem-ie-hack">&nbsp;</span><span class="vi-cursor">|</span>';
       letters.splice(cursorPosition, 0, lettersSpan);
-    }else{
+    } else {
       letters.splice(cursorPosition, 0, '<span class="vi-cursor">|</span>');
     }
-    
+
     return letters.join('');
   };
 
   VirtualInput.prototype.bindKeys = function() {
-    if(this.isKeysBound){
+    if (this.isKeysBound) {
       this.unbindKeys();
     }
 
@@ -186,12 +193,12 @@
   };
 
   VirtualInput.prototype.unbindKeys = function() {
-    try{
+    try {
       var inputElem = $(this.elem).get(0);
 
       this.mousetrap.unbind(this.keysList);
       this.isKeysBound = false;
-    }catch(e){
+    } catch (e) {
       //console.log('Error in Virtual input in unbindKeys')
     }
   };
@@ -199,27 +206,27 @@
   VirtualInput.prototype.setFocus = function() {
     $(this.elem).get(0).focus();
 
-    if(!this.isKeysBound){
+    if (!this.isKeysBound) {
       this.register();
     }
   };
 
 
-  function KeyProcessor(keysList, maxLength){
+  function KeyProcessor(keysList, maxLength) {
     this.keyList = keysList || [];
     maxLength = maxLength || -1;
 
-    var removeChar = function(text, cursorPosition){
+    var removeChar = function(text, cursorPosition) {
       cursorPosition = cursorPosition || 0;
 
       var b1 = text.slice(0, cursorPosition - 1),
-          b2 = text.slice(cursorPosition, text.length),
-          d  = text.charAt(cursorPosition-1);
+        b2 = text.slice(cursorPosition, text.length),
+        d = text.charAt(cursorPosition - 1);
 
       return b1 + b2;
     };
 
-    var insertChar = function(text, char, cursorPosition){
+    var insertChar = function(text, char, cursorPosition) {
       cursorPosition = cursorPosition || 0;
       var letters = text.split('');
       letters.splice(cursorPosition, 0, char);
@@ -228,38 +235,38 @@
     };
 
     return {
-      getProcessedInputInfo: function(text, key, cursorPosition){
+      getProcessedInputInfo: function(text, key, cursorPosition) {
         cursorPosition = cursorPosition === null ? output.length : cursorPosition;
 
         var output = text,
-            prevCursorPosition = cursorPosition,
-            isSpecialKey = true;
+          prevCursorPosition = cursorPosition,
+          isSpecialKey = true;
 
-        switch(key){
+        switch (key) {
           case 'backspace':
-            if(cursorPosition > 0 && output.length > 0){
+            if (cursorPosition > 0 && output.length > 0) {
               output = removeChar(output, cursorPosition);
               cursorPosition = cursorPosition - 1;
             }
-            
+
             break;
           case 'del':
-            if(cursorPosition >= 0 && output.length > 0){
+            if (cursorPosition >= 0 && output.length > 0) {
               output = removeChar(output, cursorPosition + 1);
             }
-            
+
             break;
           case 'left':
             cursorPosition = cursorPosition - 1;
 
-            if(cursorPosition < 0){
+            if (cursorPosition < 0) {
               cursorPosition = 0;
             }
             break;
           case 'right':
             cursorPosition = cursorPosition + 1;
 
-            if(cursorPosition > output.length){
+            if (cursorPosition > output.length) {
               cursorPosition = output.length;
             }
             break;
@@ -286,7 +293,7 @@
 
           default:
             isSpecialKey = false;
-            if(!(maxLength > -1 && text.length >= maxLength )){
+            if (!(maxLength > -1 && text.length >= maxLength)) {
               output = insertChar(output, key, cursorPosition);
               cursorPosition = cursorPosition + 1;
             }
@@ -305,27 +312,26 @@
     };
   }
 
-  function LetterPlacer(inputBox){
+  function LetterPlacer(inputBox) {
     var box = $(inputBox);
     var maxLetterWidth = 15; // in px
 
     return {
-      getInputBoxWidth: function(){
-        var getWidth = function(cssProp){
+      getInputBoxWidth: function() {
+        var getWidth = function(cssProp) {
           var b = box.css(cssProp);
-          if(b !== undefined){
+          if (b !== undefined) {
             b = parseInt(b.toString().replace(/([^0-9])+/g, ''));
-          }else{
+          } else {
             b = 0;
           }
           return b;
         };
 
-        var borderWidth  = getWidth('border-left-width') + getWidth('border-right-width');
+        var borderWidth = getWidth('border-left-width') + getWidth('border-right-width');
         var paddingWidth = getWidth('padding-left') + getWidth('padding-right');
         var marginWidth = getWidth('margin-left') + getWidth('margin-right');
-        // console.log('box.width()', box.width(), ' borderWidth =>', borderWidth, 'paddingWidth =>', paddingWidth);
-        return { 
+        return {
           width: box.width(),
           borderWidth: borderWidth,
           paddingWidth: paddingWidth,
@@ -333,43 +339,30 @@
         };
       },
 
-      getLettersWidth: function(){
+      getLettersWidth: function() {
         var lettersWidth = 0;
         var maxLW = 0;
-        var lettersWidthOffset = 0;
 
+        box.find('.vi-letter').each(function(i, l) {
+          var lw = $(l).get(0).getBoundingClientRect().width;
 
-        box.find('.vi-letter').each(function(i, l){
-          var lw = $(l).width();
-          
-          if(maxLW < lw){
+          if (maxLW < lw) {
             maxLW = lw;
           }
 
           lettersWidth += lw;
-          lettersWidthOffset += $(l).get(0).offsetWidth; 
         });
 
         maxLetterWidth = maxLW;
 
-        var size1 = calculateSize($('#virtual-input-elem .vi-letter').text(), {
-           font: 'Trebuchet MS',
-           fontSize: '45px',
-           fontWeight: 'normal'
-        });
-
-
-        console.log('lettersWidth =>', lettersWidth, ' lettersWidthOffset =>', lettersWidthOffset, ' size1 =>', size1.width );
-
-        return size1.width || lettersWidth;
+        return lettersWidth;
       },
 
-      isLettersWidthGreaterThanInputBox: function(){
+      isLettersWidthGreaterThanInputBox: function() {
         var boxWidth = this.getInputBoxWidth();
         var lettersWidth = this.getLettersWidth();
-        var bw = boxWidth.width ; //+ boxWidth.borderWidth + boxWidth.paddingWidth;
+        var bw = boxWidth.width; //+ boxWidth.borderWidth + boxWidth.paddingWidth;
 
-        // console.log('boxWidth =>', boxWidth, '   letter width =>', lettersWidth,  ' difference =>', lettersWidth - bw);
         return lettersWidth > bw;
       },
 
@@ -378,17 +371,15 @@
        * To mitigate the gap on right side we have to use this factor.
        * @return {[type]} [description]
        */
-      getWidthFactorForLongWords: function(lettersWidth){
+      getWidthFactorForLongWords: function(lettersWidth) {
         // 2123 => 56, 1573 => 41
         // x = (41/1573 )* y => x = 0.026064y;
         // return Math.round(0.026064 * lettersWidth);
         return Math.round(0.026377 * lettersWidth);
       },
 
-      setLettersPosition: function(info){
-        console.log('---- haha -----');
-        if(this.isLettersWidthGreaterThanInputBox()){
-          // console.log('set position...');
+      setLettersPosition: function() {
+        if (this.isLettersWidthGreaterThanInputBox()) {
           var firstLetterWidth = box.find('.vi-letter:first').width();
           var cursorWidth = 0;
 
@@ -400,98 +391,86 @@
           var factor = this.getWidthFactorForLongWords(lettersWidth);
 
           var extraLen = lettersWidth - bw.width - bw.paddingWidth - bw.borderWidth;
-              extraLen =  extraLen - firstLetterWidth - cursorWidth + rightGap;
+          extraLen = extraLen - firstLetterWidth - cursorWidth + rightGap;
 
-              // Some browser specific magics
-              // if(bowser.msie || bowser.firefox || (bowser.chrome && parseInt(bowser.version) >= 52)){
-              //   extraLen =  extraLen;
-              // }else{
-              //   extraLen =  extraLen - factor;
-              // }
+          // Some browser specific magics
+          // if(bowser.msie || bowser.firefox || (bowser.chrome && parseInt(bowser.version) >= 52)){
+          //   extraLen =  extraLen;
+          // }else{
+          //   extraLen =  extraLen - factor;
+          // }
 
-          console.log('extraLen =>', extraLen, ' factor =>', factor, ' len =>', box.find('.vi-letter').size(), 
-            ' this.getLettersWidth =>', this.getLettersWidth(), ' this.getInputBoxWidth() =>', this.getInputBoxWidth() , 
-            ' firstLetterWidth =>', firstLetterWidth, "\n====");
-          // box.find('.vi-letter:first').css({'margin-left': -1 * extraLen});
+          // console.log('extraLen =>', extraLen, ' factor =>', factor, ' len =>', box.find('.vi-letter').size(), 
+          //   ' this.getLettersWidth =>', this.getLettersWidth(), ' this.getInputBoxWidth() =>', this.getInputBoxWidth() , 
+          //   ' firstLetterWidth =>', firstLetterWidth, "\n====");
 
           this.calculateCursorPosition(extraLen, bw);
-        }else{
+        } else {
           box.data('prev-extra-left', 0).data('letters', box.find('.vi-letter').size());
         }
       },
 
-      getPreviousExtraLeft: function(currExtraLeft){
-        var extraLeft   = box.data('prev-extra-left') || 0;
-        var extraLen   = box.data('prev-extra-length') || 0;
+      /**
+       * Get the previous margin left value
+       * @param  {[type]} currExtraLeft [description]
+       * @return {[type]}               [description]
+       */
+      getPreviousExtraLeft: function(currExtraLeft) {
+        var extraLeft = box.data('prev-extra-left') || 0;
+        var extraLen = box.data('prev-extra-length') || 0;
         var prevLetters = box.data('letters') || 0;
         var currLetters = box.find('.vi-letter').size();
 
         // Some character is deleted by backspace or delete key
-        if(currLetters < prevLetters){
+        if (currLetters < prevLetters) {
           extraLeft = extraLeft - (extraLen - currExtraLeft);
         }
 
         return extraLeft;
       },
 
-      calculateCursorPosition: function(extraLeft, boxWidth){
+      /**
+       * Calulate the cursor position on the basis of letters positions in the box.
+       * If it is left most position in input box then move the letters right.
+       * If it is on right most position in input box then move the letters left.
+       * 
+       * @param  {[type]} extraLeft [description]
+       * @param  {[type]} boxWidth  [description]
+       * @return {[type]}           [description]
+       */
+      calculateCursorPosition: function(extraLeft, boxWidth) {
         var cursor = box.find('.vi-cursor');
         var firstLetter = box.find('.vi-letter:first');
-        var x = extraLeft;
         var cw = cursor.width();
-        var cLeft = cursor.offset().left;
-        var lw = maxLetterWidth;
-        var bw = boxWidth.width - boxWidth.paddingWidth - boxWidth.borderWidth;
         var atMostLeft = false;
         var atMostRight = false;
-        
-        var prevExtraLeft = this.getPreviousExtraLeft(extraLeft);
-        box.data('prev-extra-length', extraLeft);
 
+        var prevExtraLeft = this.getPreviousExtraLeft(extraLeft);
         var bRect = box.get(0).getBoundingClientRect();
         var cRect = cursor.get(0).getBoundingClientRect();
 
-        // if(cLeft < x + lw){
-        //   atMostLeft = true;
-        // }else if(cLeft > x + bw - lw){
-        //   atMostRight = true;
-        // }
+        box.data('prev-extra-length', extraLeft);
 
-        // if((cRect.left - extraLeft )< bRect.left){
-        //   atMostLeft = true;
-        // }else if(bRect.right < cRect.right){
-        //   atMostRight = true;
-        // }
-
-        if((cRect.left - extraLeft )< bRect.left){
+        if ((cRect.left - extraLeft) < bRect.left) {
           atMostLeft = true;
-        }else if(bRect.right < (cRect.right - prevExtraLeft)){
+        } else if (bRect.right < (cRect.right - prevExtraLeft)) {
           atMostRight = true;
         }
 
-        if(atMostLeft){
-          var rlw = cursor.next().get(0).offsetWidth; // right letter width
-          extraLeft = extraLeft - cw - rlw;
-
+        if (atMostLeft) {
           extraLeft = cRect.left - firstLetter.get(0).getBoundingClientRect().left;
-        }else if(atMostRight){
-          var hasNextLetter = !!cursor.next().get(0);
-
-          // if(hasNextLetter){
-            // var llw = cursor.prev().get(0).offsetWidth; // left letter width
-            // extraLeft = extraLeft + cw + llw;
-            extraLeft = cRect.right - bRect.right + 6;
-          // }
-        }else{
+        } else if (atMostRight) {
+          extraLeft = cRect.right - bRect.right + 6;
+        } else {
           extraLeft = prevExtraLeft;
         }
 
-        //if(atMostLeft || atMostRight){
-          box.find('.vi-letter:first').css({'margin-left': -1 * extraLeft});
-        //}
-        
-        box.data('prev-extra-left', extraLeft).data('letters', box.find('.vi-letter').size());
-        
+        box.find('.vi-letter:first')
+          .css({
+            'margin-left': -1 * extraLeft
+          });
+        box.data('prev-extra-left', extraLeft)
+          .data('letters', box.find('.vi-letter').size());
       }
 
     };
